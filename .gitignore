@@ -3,3 +3,4 @@ dist/
 *.zip
 .test-images/
 .harness/
+dist-firefox/

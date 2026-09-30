@@ -98,13 +98,24 @@ export function setSessionProvider(provider: SessionProvider) {
   sessionProvider = provider;
 }
 
+/**
+ * Firefox runs content-script fetch() as the extension, not the page, so Google may reject it;
+ * `content.fetch` is Firefox's page-context fetch. Chrome has neither quirk nor `content`.
+ */
+function pageFetch(): typeof fetch {
+  const firefoxContent = (globalThis as { content?: { fetch?: typeof fetch } }).content;
+  return typeof firefoxContent?.fetch === 'function'
+    ? firefoxContent.fetch.bind(firefoxContent)
+    : fetch;
+}
+
 export async function call(rpcid: string, payload: unknown): Promise<unknown> {
   if (!sessionProvider) throw new Error('SnapSort: session provider not set');
   const session = await sessionProvider();
   reqCounter += 100000;
   const { url, body } = encodeRequest(rpcid, payload, session, reqCounter, location.pathname);
   const text = await throttled(async () => {
-    const res = await fetch(url, {
+    const res = await pageFetch()(url, {
       method: 'POST',
       headers: { 'content-type': 'application/x-www-form-urlencoded;charset=UTF-8' },
       body,

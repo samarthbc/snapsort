@@ -13,7 +13,8 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "harness": "node scripts/build.mjs --harness",
-    "demo": "node scripts/demo.mjs"
+    "demo": "node scripts/demo.mjs",
+    "firefox": "node scripts/build.mjs --firefox"
   },
   "dependencies": {
     "idb": "^8.0.3",
