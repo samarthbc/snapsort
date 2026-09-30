@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "SnapSort",
+  "version": "0.0.1",
+  "description": "Swipe through your Google Photos library: keep, discard, add to albums.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://photos.google.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://photos.google.com/*"],
+      "js": ["main-world.js"],
+      "run_at": "document_idle",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["https://photos.google.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  }
+}
